@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты обработки видео</title>
+    <link rel="stylesheet" href="/static/css/styles1.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <div class="center-content">
+        <header>
+            <h1 class="gray-title" style="margin-bottom: 35px;">Результаты обработки видео</h1>
+        </header>
+
+        {% if results %}
+            <main>
+                <section style="margin-bottom: 58px;">
+                    <h2>Общее количество людей:</h2>
+                    <p style="color: #00e6e6" id="unique-people-count" data-count="{{ results['total_unique_people'] }}">0</p>
+                </section>
+                <section>
+                    <h2 style="margin-bottom: 80px;">Статистика по направлениям:</h2>
+                    <div class="bar-chart" style="margin-top: 85px">
+                        {% for direction, count in results['movement_statistics'].items() %}
+                            <div class="bar-container">
+                                <div class="bar" style="--height: {{ count }};" data-label="{{ count }}"></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="base-line"></div>
+                    <div class="direction-labels">
+                        {% for direction in results['movement_statistics'].keys() %}
+                            <p>{{ direction|lower }}</p>
+                        {% endfor %}
+                    </div>
+                    
+                </section>
+                <div class="peak-zone" style="margin-top: 85px">
+                    <h2>Зона пикового скопления</h2>
+                    <p>Промежуток: {{ results['peak_density_zone']['start_time'] }} – {{ results['peak_density_zone']['end_time'] }} сек.</p>
+                    <p>Среднее число людей — {{ results['peak_density_zone']['average_count'] | int }}</p>
+                    <p>Максимальное число людей — {{ results['peak_density_zone']['max_count'] }}</p>
+                </div>
+
+
+
+                <a href="/" class="daun" style="text-decoration:none;">Вернуться на главную страницу</a>
+
+                <p></p>
+
+                <div class="table-controls">
+                    <h2>Информация о пешеходах</h2>
+                    <div class="sort-controls">
+                        <select id="sortField">
+                            <option value="id">Сортировать по ID</option>
+                            <option value="direction">Сортировать по направлению</option>
+                            <option value="timeOnScreen">Сортировать по времени на экране</option>
+                            <option value="enterTime">Сортировать по времени входа</option>
+                            <option value="exitTime">Сортировать по времени выхода</option>
+                        </select>
+                        <button id="sortOrderBtn" data-order="asc">По возрастанию</button>
+                    </div>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Направление</th>
+                            <th>Время на экране (сек)</th>
+                            <th>Время входа (сек)</th>
+                            <th>Время выхода (сек)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- there will be lines -->
+                    </tbody>
+                </table>
+
+            </main>
+        {% else %}
+            <main>
+                <p>Результатов пока нет. Загрузите видео для обработки.</p>
+            </main>
+        {% endif %}
+    </div>
+
+    <button id="saveBtn" class="save-button">Скачать отчет</button>
+
+    <button class="scroll-button" id="scrollButton">Информация о пешеходах</button>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="/static/js/particles-config.js"></script>
+    <script src="/static/js/script1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script type="application/json" id="id_directions">{{ results['id_directions']|tojson|safe }}</script>
+    <script type="application/json" id="person_time_data">{{ results['person_time_data']|tojson|safe }}</script>
+
+    <script>
+        const idDirections = JSON.parse(document.getElementById('id_directions').textContent);
+        const personTimeData = JSON.parse(document.getElementById('person_time_data').textContent);
+        const tableBody = document.getElementById("tableBody");
+        
+        // variables for sorting
+        let currentSortField = 'id';
+        let currentSortOrder = 'asc';
+        
+        // functions for table
+        function populateTable() {
+            tableBody.innerHTML = '';  // deleting existing lines
+            
+            // creating list for sorting
+            let data = [];
+            for (const [id, direction] of Object.entries(idDirections)) {
+                const timeData = personTimeData[id] || {};
+                data.push({
+                    id: parseInt(id),
+                    direction: direction,
+                    enterTime: timeData.enter_time || 0,
+                    exitTime: timeData.exit_time || 0,
+                    timeOnScreen: timeData.time_on_screen || 0
+                });
+            }
+            
+            // sorting
+            data.sort((a, b) => {
+                let valueA = a[currentSortField];
+                let valueB = b[currentSortField];
+                
+                // for string lines
+                if (typeof valueA === 'string') {
+                    valueA = valueA.toLowerCase();
+                    valueB = valueB.toLowerCase();
+                }
+                
+                if (valueA < valueB) return currentSortOrder === 'asc' ? -1 : 1;
+                if (valueA > valueB) return currentSortOrder === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            // filling up the table with sorted data
+            data.forEach(item => {
+                const row = document.createElement("tr");
+                
+                const idCell = document.createElement("td");
+                idCell.textContent = item.id;
+                
+                const directionCell = document.createElement("td");
+                directionCell.textContent = item.direction;
+                
+                const timeOnScreenCell = document.createElement("td");
+                timeOnScreenCell.textContent = item.timeOnScreen.toFixed(2);
+                
+                const enterTimeCell = document.createElement("td");
+                enterTimeCell.textContent = item.enterTime.toFixed(2);
+                
+                const exitTimeCell = document.createElement("td");
+                exitTimeCell.textContent = item.exitTime.toFixed(2);
+                
+                row.appendChild(idCell);
+                row.appendChild(directionCell);
+                row.appendChild(timeOnScreenCell);
+                row.appendChild(enterTimeCell);
+                row.appendChild(exitTimeCell);
+                
+                tableBody.appendChild(row);
+            });
+        }
+        
+        // handler for the drop-down list of sorting fields
+        document.getElementById('sortField').addEventListener('change', function() {
+            currentSortField = this.value;
+            populateTable();
+        });
+        
+        // handler for the sort order button
+        document.getElementById('sortOrderBtn').addEventListener('click', function() {
+            currentSortOrder = currentSortOrder === 'asc' ? 'desc' : 'asc';
+            updateSortOrderButtonText();
+            populateTable();
+        });
+        
+        // text update function of the sort button
+        function updateSortOrderButtonText() {
+            const btn = document.getElementById('sortOrderBtn');
+            btn.textContent = currentSortOrder === 'asc' ? 'In ascending order' : 'Descending order';
+            btn.dataset.order = currentSortOrder;
+        }
+        
+        // initializing the table when loading the page
+        populateTable();
+
+        // scrolling down the page when clicking on the button
+        document.getElementById("scrollButton").addEventListener("click", function () {
+            const tableSection = document.querySelector(".table-controls");
+            if (tableSection) {
+                tableSection.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        });
+
+
+        // show/hide the button when scrolling
+        window.addEventListener("scroll", function() {
+            const scrollButton = document.getElementById("scrollButton");
+
+            if (window.scrollY < 400) {
+                // show the button when scrolling back up
+                scrollButton.classList.remove('hidden');
+            } else {
+                // hide the button when scrolled down
+                scrollButton.classList.add('hidden');
+            }
+        });
+
+    </script>
+</body>
+</html>

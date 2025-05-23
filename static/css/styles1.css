@@ -1,0 +1,405 @@
+/* styles for the results page */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    background-color: #121212;
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    overflow: auto;
+    position: relative;
+    min-height: 200vh;
+    height: 100%;
+}
+
+/* animated background */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* center area */
+.center-content {
+    text-align: center;
+    z-index: 1;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* gray-colored title */
+.gray-title {
+    color: #00e6e6;
+}
+
+/* central number */
+#unique-people-count {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 1px 0;
+    margin-right: 15px; 
+}
+
+/* bar chart container */
+.bar-chart {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    height: 200px;
+    width: 80%;
+    margin: 0px auto;
+    position: relative;
+}
+
+/* container for each column */
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90px;
+    margin: 0 10px; /* add spacing between columns */
+}
+
+/* bar of the chart */
+.bar {
+    width: 75%;
+    background: linear-gradient(to top, #00b0b0, #00e6e6);
+    border-radius: 4px 4px 0 0;
+    height: 0;
+    transition: height 1s ease-out;
+    position: relative;
+    margin-top: -4px;
+}
+
+/* number above bars */
+.bar::after {
+    content: attr(data-label);
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+/* horizontal line */
+.base-line {
+    width: 40%;
+    height: 2.4px;
+    background-color: #ffffff;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* container for direction labels */
+.direction-labels {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+    color: white;
+    font-size: 1rem;
+    width: 40%;
+    margin: 10px auto 0;
+}
+
+/* each individual text label */
+.direction-labels p {
+    margin: 0;
+    text-align: center;
+    width: 74px;
+    font-weight: 200;
+}
+
+/* return button */
+.daun {
+    display: inline-block;
+    background: transparent;
+    border: 2px solid #00e6e6;
+    color: #00e6e6;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 45px;
+}
+
+.daun:hover {
+    background-color: #00e6e6;
+    color: black;
+}
+
+/* save button */
+.save-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    border: 2px solid #00e6e6;
+    color: #00e6e6;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    z-index: 2;
+}
+
+.scroll-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: transparent;
+    border: 2px solid #00e6e6;
+    color: #00e6e6;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s, opacity 0.5s ease-in-out;
+    z-index: 2;
+    opacity: 1;
+}
+
+.scroll-button.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.scroll-button:hover, .save-button:hover {
+    background-color: #00e6e6;
+    color: black;
+}
+
+/* table */
+.data-table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: rgba(26, 26, 26, 0.8);
+    color: white;
+    font-size: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 230, 230, 0.1);
+    margin-top: 30px;
+}
+
+.data-table th {
+    background-color: rgba(0, 176, 176, 0.9);
+    padding: 15px 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.data-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background-color 0.2s;
+}
+
+.data-table tbody tr:hover {
+    background-color: rgba(0, 230, 230, 0.05);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* container for table controls */
+.table-controls {
+    width: 80%;
+    margin: 60px auto 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.sort-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+/* dropdown styling */
+select {
+    background-color: rgba(26, 26, 26, 0.8);
+    color: white;
+    border: 1px solid #00e6e6;
+    padding: 10px 12px;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+select:focus {
+    outline: none;
+    border-color: #00e6e6;
+    box-shadow: 0 0 0 2px rgba(0, 230, 230, 0.2);
+}
+
+/* sort button styling */
+#sortOrderBtn {
+    background: transparent;
+    border: 1px solid #00e6e6;
+    color: #00e6e6;
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    min-width: 130px;
+}
+
+#sortOrderBtn:hover {
+    background-color: rgba(0, 230, 230, 0.1);
+}
+
+#sortOrderBtn:active {
+    background-color: #00e6e6;
+    color: black;
+}
+
+#sortOrderBtn[data-order="asc"]::after {
+    content: " ↑";
+}
+
+#sortOrderBtn[data-order="desc"]::after {
+    content: " ↓";
+}
+
+.bar-label {
+    margin-top: 10px;
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+}
+
+.direction-labels {
+    display: flex;
+    justify-content: space-around;
+    width: 80%;
+    margin: 10px auto 0;
+    color: white;
+    font-size: 1rem;
+}
+
+.direction-labels p {
+    width: 90px;
+    text-align: center;
+    margin: 0 10px;
+}
+
+.bar-chart,
+.direction-labels {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.bar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90px;
+    margin: 0 12px;
+}
+
+.bar {
+    width: 75%;
+    background: linear-gradient(to top, #00b0b0, #00e6e6);
+    border-radius: 4px 4px 0 0;
+    height: 0;
+    transition: height 1s ease-out;
+    position: relative;
+    margin-top: -4px;
+}
+
+.bar::after {
+    content: attr(data-label);
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.direction-labels p {
+    width: 90px;
+    text-align: center;
+    margin: 0 10px;
+    color: white;
+    font-size: 1rem;
+}
+
+.peak-zone {
+    width: 450px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #111;
+    border: 2px solid #00e6e6;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 12px rgba(0, 230, 230, 0.3);
+}
+
+.peak-zone h2 {
+    margin-bottom: 15px;
+    color: #00e6e6;
+}
+
+.report-block {
+    text-align: center;
+    margin-top: 40px;
+    color: white;
+}
+
+.social-share a {
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 15px;
+    background-color: #00e6e6;
+    color: black;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.social-share {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.social-share span {
+    color: white;
+    margin-right: 10px;
+}
+
+.social-share a {
+    display: inline-block;
+    margin: 5px;
+    padding: 6px 10px;
+    background-color: #00e6e6;
+    color: black;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 14px;
+}

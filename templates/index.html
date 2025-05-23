@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Site</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css">
+</head>
+<body>
+    <!-- animations on the background -->
+    <div id="particles-js"></div>
+
+    <!-- top menu -->
+    <div class="top-menu">
+        <div class="menu-item" data-tooltip="Программа анализирует видеозаписи с помощью YOLO и ByteTrack, чтобы определить количество пешеходов, их движение и построить графики изменений.">
+            Как это работает?
+            <div class="info-popup">Программа анализирует видеозаписи с помощью YOLO и ByteTrack, чтобы определить количество пешеходов, их движение и построить графики изменений.</div>
+        </div>
+        <div class="menu-item" data-tooltip="Разработчик алгоритма: Telegram | GitHub, Разработчик сайта: Telegram | GitHub">
+            Разработчики
+            <div class="info-popup">
+                <div>
+                    <strong>Разработчик алгоритма:</strong><br>
+                    <a href="https://t.me/zerofishy" target="_blank">Telegram</a> | <a href="https://github.com/zerofishy1" target="_blank">GitHub</a>
+                </div>
+                <br>
+                <div>
+                    <strong>Разработчик сайта:</strong><br>
+                    <a href="https://t.me/leaxy" target="_blank">Telegram</a> | <a href="https://github.com/exleaxy" target="_blank">GitHub</a>
+                </div>
+                <br>
+                <div>
+                    <a href="https://github.com/zerofishy1/Pedestrian-Flow-Analysis" target="_blank">GitHub Репозиторий</a>
+                </div>
+            </div>
+        </div>
+        <div class="menu-item" data-tooltip="История загрузок">
+            История загрузок
+            <div class="info-popup">
+                {% if files %}
+                <ul class="file-list">
+                    {% for file in files %}
+                    <li class="file-item" title="Файл: {{ file }}">{{ file }}</li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                История пуста
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- center area -->
+    <div class="center-content">
+        <h1 style="color: #00e6e6">Анализируйте пешеходов</h1>
+        <p style="color: white;">Загрузите видео, чтобы получить подробную статистику о пешеходах.</p>
+        <form id="upload-form" action="/upload" method="POST" enctype="multipart/form-data">
+    <label class="upload-button">
+        <input type="file" id="file-input" name="file" accept="video/*">
+        <span>Загрузить файл</span>
+    </label>
+    <p id="file-name"></p>
+
+    <div id="video-controls" style="display: none; margin-top: 20px;">
+        <video id="video-preview" width="400" controls style="margin-bottom: 20px;"></video>
+    
+        <div id="slider" style="margin: 20px auto; width: 90%; max-width: 400px;"></div>
+        <div style="text-align: center; color: white; margin-top: 10px;">
+            <span>Начало: <span id="start-label">0.00</span> c</span>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>Конец: <span id="end-label">0.00</span> c</span>
+        </div>
+    
+        <input type="hidden" name="start_time" id="start-time">
+        <input type="hidden" name="end_time" id="end-time">
+    </div>
+    
+    <button type="submit" class="submit-button" id="submit-button" style="display: none; margin-top: 25px;">Отправить</button>    
+</form>
+
+        
+        
+
+        <!-- results display -->
+        <div id="result" style="margin-top: 20px;"></div>
+    </div>
+
+    <!-- connecting libraries -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="particles-config.js"></script>
+    <script src="/static/js/script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const fileName = document.getElementById('file-name');
+        const form = document.getElementById('upload-form');
+    
+        const videoControls = document.getElementById('video-controls');
+        const videoPreview = document.getElementById('video-preview');
+        const submitBtn = document.getElementById('submit-button');
+    
+        const sliderContainer = document.getElementById('slider');
+        const startLabel = document.getElementById('start-label');
+        const endLabel = document.getElementById('end-label');
+        const startTimeInput = document.getElementById('start-time');
+        const endTimeInput = document.getElementById('end-time');
+    
+        let slider;
+    
+        fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                fileName.textContent = `Выбран файл: ${file.name}`;
+    
+                const url = URL.createObjectURL(file);
+                videoPreview.src = url;
+                videoControls.style.display = 'block';
+    
+                videoPreview.onloadedmetadata = function () {
+                    const duration = +videoPreview.duration.toFixed(2);
+    
+                    if (slider) {
+                        slider.destroy();
+                    }
+    
+                    slider = noUiSlider.create(sliderContainer, {
+                        start: [0, duration],
+                        connect: true,
+                        range: {
+                            min: 0,
+                            max: duration
+                        },
+                        step: 0.01,
+                        tooltips: [true, true],
+                        format: {
+                            to: value => value.toFixed(2),
+                            from: value => parseFloat(value)
+                        }
+                    });
+    
+                    startTimeInput.value = '0.00';
+                    endTimeInput.value = duration.toFixed(2);
+                    startLabel.textContent = '0.00';
+                    endLabel.textContent = duration.toFixed(2);
+                    submitBtn.style.display = 'inline-block';
+    
+                    slider.on('update', function (values) {
+                        const [start, end] = values.map(parseFloat);
+    
+                        startLabel.textContent = start.toFixed(2);
+                        endLabel.textContent = end.toFixed(2);
+                        startTimeInput.value = start.toFixed(2);
+                        endTimeInput.value = end.toFixed(2);
+                    });
+                };
+            } else {
+                fileName.textContent = '';
+                videoControls.style.display = 'none';
+                submitBtn.style.display = 'none';
+            }
+        });
+    </script>     
+</body>
+</html>

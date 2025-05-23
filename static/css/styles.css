@@ -1,0 +1,290 @@
+/* styles for the page */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    color: white;
+    background-color: #121212; /* dark background */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+/* animated background */
+#particles-js {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* behind main content */
+}
+
+/* top menu */
+.top-menu {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+
+/* tooltip animation */
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* central area */
+.center-content {
+    text-align: center;
+    margin-top: auto;
+    margin-bottom: auto;
+    z-index: 1;
+}
+
+/* hint text */
+.description-text {
+    color: #b0b0b0; /* gray text color */
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+/* upload button */
+.upload-button {
+    display: inline-block;
+    background: transparent;
+    border: 2px solid #00e6e6;
+    color: #00e6e6;
+    padding: 15px 40px;
+    border-radius: 30px; /* fully oval shape */
+    font-size: 16px;
+    font-weight: bold; /* added bold text */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
+}
+
+.upload-button:hover {
+    background-color: #00e6e6;
+    color: black;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+/* additional styles for animated dots */
+.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #181818; /* dark background */
+    overflow: hidden;
+    z-index: -1;
+}
+
+.dot {
+    position: absolute;
+    border-radius: 50%;
+    background-color: #00e6e6;
+    opacity: 0.5;
+    animation: moveDot 5s linear infinite;
+}
+
+@keyframes moveDot {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(400px, 400px);
+    }
+}
+
+
+/* general styles for popups */
+.menu-item {
+    position: relative;
+    font-size: 16px;
+    cursor: default;
+    color: #00e6e6;
+}
+
+.menu-item::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: #00e6e6;
+    transition: width 0.3s ease;
+}
+
+.menu-item:hover::after {
+    width: 100%;
+}
+
+/* link styles inside the popup */
+.info-popup a {
+    color: white; /* white color */
+    text-decoration: none; /* remove default underline */
+}
+
+.info-popup a:hover {
+    text-decoration: underline; /* underline on hover */
+}
+
+/* popup window style */
+.info-popup {
+    display: none; /* hidden by default */
+    position: absolute;
+    top: 23px;  /* reduced top margin */
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px 25px; /* increased padding */
+    width: 250px; /* fixed width */
+    border-radius: 5px;
+    font-size: 14px;
+    text-align: center;
+    z-index: 10;
+    animation: fade-in 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;  /* smooth disappearance */
+    opacity: 0;  /* initial opacity */
+    visibility: hidden;  /* initial visibility */
+}
+
+/* show popup on hover */
+.menu-item:hover .info-popup {
+    display: block;
+    opacity: 1;  /* fully visible when shown */
+    visibility: visible;  /* set visible */
+    transition-delay: 0.3s; /* delay to prevent instant disappearance */
+}
+
+/* keep visible if hovered */
+.menu-item .info-popup:hover {
+    display: block;
+    opacity: 1; /* remove transparency */
+    visibility: visible;
+    transition-delay: 0s;  /* no delay on disappearance when hovered */
+}
+
+/* smooth disappearance with longer delay */
+.menu-item .info-popup {
+    transition-delay: 0.5s; /* increase delay to 0.5 seconds */
+}
+
+.submit-button {
+    display: inline-block;
+    background: transparent;
+    border: 2px solid #00e6e6;
+    color: #00e6e6;
+    padding: 15px 40px;
+    border-radius: 30px; /* fully oval shape */
+    font-size: 16px;
+    font-weight: bold; /* added bold text */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-top: 10px;
+}
+
+.submit-button:hover {
+    background-color: #00ffff;
+    color: #000; /* text color on hover */
+}
+
+#file-name {
+    color: grey;
+}
+
+.file-list {
+    list-style: none;
+    padding: 0;
+}
+
+.file-item {
+    margin: 0px 0;
+    color: white;
+}
+
+.submit-button {
+    display: inline-block;
+    background: transparent;
+    border: 2px solid #00e6e6;
+    color: #00e6e6;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.submit-button:hover {
+    background-color: #00e6e6;
+    color: black;
+}
+
+/* === noUiSlider: styled to match the website === */
+
+/* main slider container */
+.noUi-target {
+    background: #454545 !important; /* slider background */
+    border: none !important; /* remove default border */
+    outline: none !important; /* remove outer line */
+    border-radius: 12px !important; /* rounded corners */
+    height: 16px !important; /* thickness */
+    box-shadow: none !important; /* remove all shadows */
+}
+
+/* handles (draggable knobs) */
+.noUi-handle {
+    width: 24px !important; /* knob width */
+    height: 24px !important; /* knob height */
+    background: #009a9a !important; /* solid handle color */
+    border: none !important; /* remove white border */
+    border-radius: 50% !important; /* fully round shape */
+    box-shadow: none !important; /* remove glow */
+    cursor: pointer !important; /* pointer cursor */
+    transition: transform 0.2s, background-color 0.2s !important; /* animation on hover */
+}
+
+/* hover effect on handle */
+.noUi-handle:hover {
+    transform: scale(1.2) !important; /* enlarge on hover */
+    background: #007a7a !important; /* color on hover */
+}
+
+/* range line between handles */
+.noUi-connect {
+    background: #009a9a !important; /* color of connection line */
+    border-radius: 10px !important; /* round corners */
+}
+
+/* remove visual handle leftovers */
+.noUi-handle::before,
+.noUi-handle::after {
+    display: none !important; /* completely remove vertical lines */
+}
+
+/* hide numbers above handles (tooltips) */
+.noUi-tooltip {
+    display: none !important; /* disable number display */
+    pointer-events: none !important; /* disable interaction */
+}
+
+.noUi-handle-upper {
+    transform: translateX(-5px) !important; /* shift right by 2px */
+}
