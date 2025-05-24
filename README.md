@@ -46,15 +46,15 @@ http://localhost:5000
 </p>
 
 <p align="center">
-  <i>Initial screen before uploading a file, and the state after a file is selected with visible time selection slider.</i>
+  <i>Initial screen before uploading a file with some project info, and the state after a file is selected with visible time selection slider.</i>
 </p>
 
 <br/>
 
 <p align="center">
   <img src="screenshots/results1.png" width="31%"/>
+  <img src="screenshots/results2.png" width="31%"/>
   <img src="screenshots/results3.png" width="31%"/>
-  <img src="screenshots/results4.png" width="31%"/>
 </p>
 
 <p align="center">
@@ -71,6 +71,14 @@ http://localhost:5000
   <i>Example of an auto-generated report summarizing key data in a downloadable image: pedestrian count, movement directions, peak values, and a stylized chart section. Can be downloaded with the "Скачать отчет" button on the top right corner of results screen.</i>
 </p>
 
+<p align="center">
+  <img src="screenshots/bot1.jpg" width="25%"/>
+  <img src="screenshots/bot2.jpg" width="25%"/>
+</p>
+
+<p align="center">
+  <i>Example of how telegram bot works.</i>
+</p>
 
 ## 🔧 Technologies
 
