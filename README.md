@@ -37,6 +37,21 @@ http://localhost:5000
 
 6. Wait and see the results.
 
+## 🤖 Telegram Bot Guide
+
+1. Create a telegram bot via @BotFather
+
+2. Paste Bot Token into BOT_TOKEN variable
+
+3. Start the bot:
+   ```bash
+   python bot.py
+   ```
+
+4. Send a video to the bot.
+
+5. Choose timecodes or send /continue to process the whole video. Get result + analysis in chat.
+
 
 ## 📸 Screenshots
 
@@ -86,22 +101,6 @@ http://localhost:5000
 - HTML, CSS, JS (Chart.js, noUiSlider, html2canvas)
 - Telegram Bot (python-telegram-bot)
 - JSON for storing detection results
-
-
-## 🤖 Telegram Bot
-
-1. Create a telegram bot via @BotFather
-
-2. Paste Bot Token into BOT_TOKEN variable
-
-3. Start the bot:
-   ```bash
-   python bot.py
-   ```
-
-4. Send a video to the bot.
-
-5. Choose timecodes or send /continue to process the whole video. Get result + analysis in chat.
 
 
 ## 📊 Example Output
