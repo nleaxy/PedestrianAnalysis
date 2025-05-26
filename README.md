@@ -125,3 +125,7 @@ Component | Description
 - results/
 - templates/ - HTML templates
 - README.md
+
+<p>
+  <i>fait avec amour <3</i>
+</p>
